@@ -2,6 +2,9 @@
 import { Command } from "commander";
 import { createCliContext, type GlobalCliOptions } from "./context.js";
 import { printCommandOverview, registerAllCommands } from "./commands/index.js";
+import { renderBanner } from "./banner.js";
+
+const CLI_VERSION = "0.1.0";
 
 const globalOptions: GlobalCliOptions = {};
 
@@ -45,7 +48,31 @@ program
   .description("List all top-level command groups")
   .action(() => printCommandOverview(program));
 
+program
+  .command("banner")
+  .description("Show the Flowcard CLI banner")
+  .action(async () => {
+    let apiUrl: string | undefined;
+    let user: string | undefined;
+    try {
+      const ctx = await createCliContext(globalOptions);
+      const context = await ctx.client.getContext();
+      apiUrl = context.config.apiUrl;
+      user = context.session?.user?.name ?? context.session?.user?.email;
+    } catch {
+      // Banner is best-effort; show it without status if config can't load.
+    }
+    process.stdout.write(`${renderBanner({ version: CLI_VERSION, apiUrl, user })}\n`);
+  });
+
 if (process.argv.length <= 2) {
+  // No command: show the branded startup screen, then the command overview.
+  // Suppressed when output is piped (not a TTY) or JSON is requested, so
+  // scripted use stays clean.
+  const wantsBanner = process.stdout.isTTY && process.env.FLOWCARD_OUTPUT !== "json" && !process.env.NO_BANNER;
+  if (wantsBanner) {
+    process.stdout.write(`${renderBanner({ version: CLI_VERSION })}\n`);
+  }
   printCommandOverview(program);
 } else {
   program.parse(process.argv);
