@@ -133,5 +133,5 @@ export function registerHealthCommands(program: Command, getContext: () => Promi
   program
     .command("version")
     .description("Show CLI version")
-    .action(withAction(getContext, async () => ({ name: "@flowcard/cli", version: "0.1.0" })));
+    .action(withAction(getContext, async () => ({ name: "@flowcard/cli", version: "1.0.0" })));
 }

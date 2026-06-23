@@ -4,7 +4,7 @@ import { createCliContext, type GlobalCliOptions } from "./context.js";
 import { printCommandOverview, registerAllCommands } from "./commands/index.js";
 import { renderBanner } from "./banner.js";
 
-const CLI_VERSION = "0.1.0";
+const CLI_VERSION = "1.0.0";
 
 const globalOptions: GlobalCliOptions = {};
 
@@ -13,7 +13,7 @@ const program = new Command();
 program
   .name("flowcard")
   .description("Flowcard CLI — workspace, networks, code, SQL, services, and more")
-  .version("0.1.0")
+  .version(CLI_VERSION)
   .option("--api-url <url>", "Flowcard API base URL", process.env.FLOWCARD_API_URL)
   .option("--token <token>", "Bearer token or service token", process.env.FLOWCARD_API_TOKEN)
   .option("--workspace <id>", "Default workspace id", process.env.FLOWCARD_WORKSPACE_ID)

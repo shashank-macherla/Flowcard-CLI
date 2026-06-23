@@ -1,6 +1,6 @@
 {
   "name": "flowcard-cli-workspace",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Flowcard CLI — command-line access to the Flowcard API.",
   "license": "MIT",

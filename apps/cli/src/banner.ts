@@ -35,7 +35,7 @@ function rule(width = 56): string {
 }
 
 export function renderBanner(options: BannerOptions = {}): string {
-  const { version = "0.1.0", tagline = "The workspace operating system", apiUrl, user } = options;
+  const { version = "1.0.0", tagline = "The workspace operating system", apiUrl, user } = options;
 
   const lines: string[] = [""];
   for (const row of MARK) lines.push(`  ${style.bold(row)}`);
@@ -60,6 +60,6 @@ export function renderBanner(options: BannerOptions = {}): string {
 }
 
 // Compact one-line wordmark for help headers etc.
-export function bannerTagline(version = "0.1.0"): string {
+export function bannerTagline(version = "1.0.0"): string {
   return `${style.bold("Flowcard CLI")} ${style.dim(`v${version}`)} ${glyph.bullet} ${style.dim("workspace operating system")}`;
 }
