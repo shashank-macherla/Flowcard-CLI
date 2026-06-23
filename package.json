@@ -1,0 +1,29 @@
+{
+  "name": "flowcard-cli-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Flowcard CLI — command-line access to the Flowcard API.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shashank-macherla/Flowcard-CLI.git"
+  },
+  "workspaces": [
+    "packages/shared",
+    "packages/api-client",
+    "apps/cli"
+  ],
+  "scripts": {
+    "build:cli": "npm run build -w @flowcard/shared && npm run build -w @flowcard/api-client && npm run build -w @flowcard/cli",
+    "check:cli": "npm run check -w @flowcard/api-client && npm run check -w @flowcard/cli",
+    "build": "npm run build:cli",
+    "check": "npm run check:cli",
+    "cli": "npm run build:cli && node apps/cli/bin/flowcard.js",
+    "flowcard": "node apps/cli/bin/flowcard.js",
+    "install-cli": "bash scripts/install-cli.sh"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.3"
+  }
+}

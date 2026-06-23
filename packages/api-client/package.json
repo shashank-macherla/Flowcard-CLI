@@ -1,0 +1,19 @@
+{
+  "name": "@flowcard/api-client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -b --pretty",
+    "check": "tsc -b --pretty"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@flowcard/shared": "0.1.0"
+  }
+}
