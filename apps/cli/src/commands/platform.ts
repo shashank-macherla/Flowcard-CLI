@@ -2,6 +2,7 @@ import type { Command } from "commander";
 import { getConfigPath, getDefaultConfigDir } from "@flowcard/api-client";
 import type { CliContext } from "../context.js";
 import { parseJsonFlag, readJsonInput } from "../context.js";
+import { promptSecret, promptText } from "../prompt.js";
 import { withAction } from "./helpers.js";
 
 export function registerAuthCommands(program: Command, getContext: () => Promise<CliContext>) {
@@ -15,12 +16,15 @@ export function registerAuthCommands(program: Command, getContext: () => Promise
   auth
     .command("signup")
     .description("Create a new account")
-    .requiredOption("--name <name>")
-    .requiredOption("--email <email>")
-    .requiredOption("--password <password>")
+    .option("--name <name>", "Full name (prompted if omitted)")
+    .option("--email <email>", "Account email (prompted if omitted)")
+    .option("--password <password>", "Account password (prompted securely if omitted)")
     .action(
-      withAction(getContext, async (ctx, opts: { name: string; email: string; password: string }) => {
-        const session = await ctx.client.api.signUp({ name: opts.name, email: opts.email, password: opts.password });
+      withAction(getContext, async (ctx, opts: { name?: string; email?: string; password?: string }) => {
+        const name = opts.name ?? (await promptText("Name"));
+        const email = opts.email ?? (await promptText("Email"));
+        const password = opts.password ?? (await promptSecret("Password"));
+        const session = await ctx.client.api.signUp({ name, email, password });
         await ctx.client.setSession(session);
         return session;
       }),
@@ -29,12 +33,14 @@ export function registerAuthCommands(program: Command, getContext: () => Promise
   auth
     .command("login")
     .description("Sign in and save session")
-    .requiredOption("--email <email>")
-    .requiredOption("--password <password>")
+    .option("--email <email>", "Account email (prompted if omitted)")
+    .option("--password <password>", "Account password (prompted securely if omitted)")
     .option("--otp <code>", "Two-factor code")
     .action(
-      withAction(getContext, async (ctx, opts: { email: string; password: string; otp?: string }) => {
-        const session = await ctx.client.api.signIn({ email: opts.email, password: opts.password, otp: opts.otp });
+      withAction(getContext, async (ctx, opts: { email?: string; password?: string; otp?: string }) => {
+        const email = opts.email ?? (await promptText("Email"));
+        const password = opts.password ?? (await promptSecret("Password"));
+        const session = await ctx.client.api.signIn({ email, password, otp: opts.otp });
         await ctx.client.setSession(session);
         return session;
       }),
